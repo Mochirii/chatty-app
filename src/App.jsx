@@ -21,6 +21,7 @@ class App extends Component {
         }
       ]
     };
+    this.onMessage = this.onMessage.bind(this);
   }
 
 

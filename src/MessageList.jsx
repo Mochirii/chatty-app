@@ -7,16 +7,15 @@ class MessageList extends Component {
   }
     render() {
     
-    const message = this.props.messages.map( message => {
+    const message = this.props.messages.map((messageData, index)=> {
         return <Message 
-        key={message.content}
-        content={message.content} />
+        message={messageData}
+        key={index}/>;
     });
-
-      return(
-        <main className ="messages">
-        {messages}
-        </main>
+      return (
+        <div>
+        {message}
+        </div>
       );
     }
   }
