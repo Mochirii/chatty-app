@@ -3,13 +3,11 @@ import React, {Component} from 'react';
 class ChatBar extends Component {
     constructor(props){
         super(props);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     handleKeyPress = function(event) {
         if(event.key === 'Enter'){
-            console.log(event.target.value) 
-            this.props.newChat(event.target.value);  
+            this.props.onMessage(event.target.value);  
             event.target.value="" 
         }
     }
