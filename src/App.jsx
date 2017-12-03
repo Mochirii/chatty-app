@@ -3,50 +3,57 @@ import ChatBar from './ChatBar.jsx';
 import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {
-        name: "Bob"
-      },
-      messages: [
-        {
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
+      currentUser: {name:'Anonymous'},
+      messages: []
     };
+
   }
 
 
-  onMessage = (message) => {
+  newMessage = (message) => {
+    this.socket.send(JSON.stringify({
+      username: this.state.currentUser.name,
+      content: message,
+      type: "newMessage"
+
+
+    }));
+  }
+
+  nameChange = (current) => {
+    let oldName = this.state.currentUser;
+    const newName = {oldUsername: this.state.currentUser.name, username: current, type: "postNotification", content: `${oldName.name} changed their username to ${current}`,}
+    this.socket.send(JSON.stringify(newName));
     this.setState({
-      messages: this.state.messages.concat([{
-        username: this.state.currentUser.name,
-        content: message
-      }])
+      currentUser: {name: current}
     })
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
+    this.socket = new WebSocket("ws://localhost:3001");
+    this.socket.addEventListener('open', function (event) {
+      console.log("Connected to Server")
+    });
+    
+    this.socket.addEventListener('message',  (msg) => {
+      console.log("Received msg from server:", msg.data);
+
+      const newestMessage = JSON.parse(msg.data);
+
+      if (newestMessage.type === 'incomingMessage' || newestMessage.type === 'incomingNotification') {
+        const messages = this.state.messages;
+        messages.push(newestMessage);
+        this.setState({ messages });
+      } else {
+        console.log('ERROR!', event.data);
+      }
+    });
   }
-  
- 
 
 
   render() {
@@ -56,7 +63,10 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} onMessage={this.onMessage} />
+        <ChatBar
+        currentUser={this.state.currentUser.name}
+        newMessage={this.newMessage}
+        nameChange={this.nameChange}/>
 
       </div>
     );
