@@ -13,9 +13,7 @@ class App extends Component {
       messages: [],
       usersOnline: 0,
     };
-
   }
-
 
   newMessage = (message) => {
     this.socket.send(JSON.stringify({
@@ -51,10 +49,11 @@ class App extends Component {
         const messages = this.state.messages;
         messages.push(newestMessage);
         this.setState({ messages });
-        } else { (newestMessage.type === 'countUpdate')
-        this.setState({usersOnline: newestMessage.number});
-      } 
-    });
+      } else {
+        (newestMessage.type === 'countUpdate')
+        this.setState({ usersOnline: newestMessage.number });
+      }
+    })
   }
 
 

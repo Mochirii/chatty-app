@@ -4,15 +4,15 @@ class Message extends Component {
   constructor(props) {
     super(props);
   }
-    render() {
-      return (
-        <div>
+  render() {
+    return (
+      <div>
         <div className="message">
           <span className="message-username">{this.props.message.username}</span>
           <span className="message-content">{this.props.message.content}</span>
-          </div>
         </div>
-      );
-    }
+      </div>
+    );
   }
-  export default Message;
+}
+export default Message;
