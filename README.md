@@ -13,11 +13,11 @@ Chatty is a client-side SPA (single-page app) built with ReactJS. It allows user
 2. Install dependencies using the `npm install` command.
 3. Start the web server using the `npm start` command. You will also need to start the websocket server in the `chatty_server`        folder. The app will be served at <http://localhost:3000/> for the application and <http://localhost:3001/> for the websocket      server.
 4. Go to <http://localhost:3000/> in your browser.
-```
+
 
 ## The below dependencies are required
 
-```
+
 - Babel-core
 - Babel-loader
 - Babel-preset-es2015
