@@ -22,50 +22,32 @@ const wss = new SocketServer({ server });
 
 
 
-// function broadcastClientsCount() {
-//   const clientsCountMessage = {
-//     count: wss.clients.size
-//   }
-//   wss.broadcast(JSON.stringify(clientsCountMessage));
-// }
-
 wss.on('connection', (ws) => {
-  console.log('Client connected');
+  console.log('Client connected, now have', wss.clients.size);
 
-  function broadcastAll(message) {
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === ws.OPEN) {
-        client.send(JSON.stringify(message));
-      }
-    });
-  }
-  // broadcastClientCount();
-
-
-  ws.on('message', (msg) => {
-    let valueObject = JSON.parse(msg);
-    let valueString;
-    valueObject.id = uuidv4();
-    valueObject.type = "incomingMessage"
-   
-    //Then sends the result of the switch back to App.js
-    valueString = JSON.stringify(valueObject)
+  const countUpdate = {type: 'countUpdate', number: wss.clients.size};
+  const countUpdateString = JSON.stringify(countUpdate);
     wss.clients.forEach((client) => {
       if (client.readyState == ws.OPEN) {
-        client.send(valueString);
+        client.send(countUpdateString);
+      }
+    });
+
+  ws.on('message', (msg) => {
+    let msgObject = JSON.parse(msg);
+    msgObject.id = uuidv4();
+    msgObject.type = "incomingMessage"
+
+    let msgString = JSON.stringify(msgObject)
+    wss.clients.forEach((client) => {
+      if (client.readyState == ws.OPEN) {
+        client.send(msgString);
       }
     });
   });
 
-  //   console.log('received msg from client:', msg)
-
-  //   wss.clients.forEach(function each(client) {
-  //     if (client !== ws && client.readyState === ws.OPEN) {
-  //       client.send(data);
-  //     }
-  //   });
-  // });
-
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close',function () { 
+    console.log('Client disconnected');
+});
 });
