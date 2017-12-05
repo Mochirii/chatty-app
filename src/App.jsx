@@ -14,7 +14,7 @@ class App extends Component {
       usersOnline: 0,
     };
   }
-
+  //Allows new message to be written and appear in the chat window
   newMessage = (message) => {
     this.socket.send(JSON.stringify({
       username: this.state.currentUser.name,
@@ -24,7 +24,7 @@ class App extends Component {
 
     }));
   }
-
+//Changes username from default of 'Anonymous' to whatever the user sets it to be
   nameChange = (current) => {
     let oldName = this.state.currentUser;
     const newName = { oldUsername: this.state.currentUser.name, username: current, type: "postNotification", content: `${oldName.name} changed their username to ${current}`, }
@@ -33,7 +33,7 @@ class App extends Component {
       currentUser: { name: current }
     })
   }
-
+//Connection to server handled here
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     this.socket.addEventListener('open', function (event) {
@@ -56,6 +56,7 @@ class App extends Component {
     })
   }
 
+  //Renders html specified in the modules
 
   render() {
     return (
