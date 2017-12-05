@@ -4,6 +4,7 @@ Chatty App
 Chatty is a client-side SPA (single-page app) built with ReactJS. It allows users to communicate with each other without having to register accounts.
 ### Screenshot
 
+![Alt text](https://github.com/Mochirii/chatty-app/blob/master/build/screenshot.png)
 
 
 ## Getting Started
